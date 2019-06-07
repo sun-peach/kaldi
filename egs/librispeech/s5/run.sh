@@ -10,7 +10,8 @@ data=/export/a15/vpanayotov/data
 data_url=www.openslr.org/resources/12
 lm_url=www.openslr.org/resources/11
 mfccdir=mfcc
-stage=1
+stage=2
+end_stage=10
 
 . ./cmd.sh
 . ./path.sh
@@ -20,7 +21,8 @@ stage=1
 set -e
 
 
-if [ $stage -le 1 ]; then
+if [ $stage -le 1 ] && [ $end_stage -ge 1 ]; then
+	echo "STAGE 1: download data"
   # download the data.  Note: we're using the 100 hour setup for
   # now; later in the script we'll download more and use it to train neural
   # nets.
@@ -33,7 +35,8 @@ if [ $stage -le 1 ]; then
   local/download_lm.sh $lm_url data/local/lm
 fi
 
-if [ $stage -le 2 ]; then
+if [ $stage -le 2 ] && [ $end_stage -ge 2 ]; then
+	echo "STAGE 2: prepare data"
   # format the data as Kaldi data directories
   for part in dev-clean test-clean dev-other test-other train-clean-100; do
     # use underscore-separated names in data directories.
@@ -55,7 +58,8 @@ fi
 ## document our G2P model creation process
 #local/g2p/train_g2p.sh data/local/dict/cmudict data/local/lm
 
-if [ $stage -le 3 ]; then
+if [ $stage -le 3 ] && [ $end_stage -ge 3 ]; then
+	echo "STAGE 3: prepare G2P"
   # when the "--stage 3" option is used below we skip the G2P steps, and use the
   # lexicon we have already downloaded from openslr.org/11/
   local/prepare_dict.sh --stage 3 --nj 30 --cmd "$train_cmd" \
@@ -67,7 +71,8 @@ if [ $stage -le 3 ]; then
   local/format_lms.sh --src-dir data/lang_nosp data/local/lm
 fi
 
-if [ $stage -le 4 ]; then
+if [ $stage -le 4 ] && [ $end_stage -ge 4 ]; then
+	echo "STAGE 4: prepare LM"
   # Create ConstArpaLm format language model for full 3-gram and 4-gram LMs
   utils/build_const_arpa_lm.sh data/local/lm/lm_tglarge.arpa.gz \
     data/lang_nosp data/lang_nosp_test_tglarge
@@ -75,7 +80,8 @@ if [ $stage -le 4 ]; then
     data/lang_nosp data/lang_nosp_test_fglarge
 fi
 
-if [ $stage -le 5 ]; then
+if [ $stage -le 5 ] && [ $end_stage -ge 5 ]; then
+	echo "STAGE 5: spread parallel jobs"
   # spread the mfccs over various machines, as this data-set is quite large.
   if [[  $(hostname -f) ==  *.clsp.jhu.edu ]]; then
     mfcc=$(basename mfccdir) # in case was absolute pathname (unlikely), get basename.
@@ -85,14 +91,16 @@ if [ $stage -le 5 ]; then
 fi
 
 
-if [ $stage -le 6 ]; then
+if [ $stage -le 6 ] && [ $end_stage -ge 6 ]; then
+	echo "STAGE 6: extract feature"
   for part in dev_clean test_clean dev_other test_other train_clean_100; do
     steps/make_mfcc.sh --cmd "$train_cmd" --nj 40 data/$part exp/make_mfcc/$part $mfccdir
     steps/compute_cmvn_stats.sh data/$part exp/make_mfcc/$part $mfccdir
   done
 fi
 
-if [ $stage -le 7 ]; then
+if [ $stage -le 7 ] && [ $end_stage -ge 7 ]; then
+	echo "STAGE 7: create subset"
   # Make some small data subsets for early system-build stages.  Note, there are 29k
   # utterances in the train_clean_100 directory which has 100 hours of data.
   # For the monophone stages we select the shortest utterances, which should make it
@@ -103,7 +111,8 @@ if [ $stage -le 7 ]; then
   utils/subset_data_dir.sh data/train_clean_100 10000 data/train_10k
 fi
 
-if [ $stage -le 8 ]; then
+if [ $stage -le 8 ] && [ $end_stage -ge 8 ]; then
+	echo "STAGE 8: train mono"
   # train a monophone system
   steps/train_mono.sh --boost-silence 1.25 --nj 20 --cmd "$train_cmd" \
                       data/train_2kshort data/lang_nosp exp/mono
@@ -119,7 +128,8 @@ if [ $stage -le 8 ]; then
   )&
 fi
 
-if [ $stage -le 9 ]; then
+if [ $stage -le 9 ] && [ $end_stage -ge 9 ]; then
+	echo "STAGE 9: train tri1"
   steps/align_si.sh --boost-silence 1.25 --nj 10 --cmd "$train_cmd" \
                     data/train_5k data/lang_nosp exp/mono exp/mono_ali_5k
 
@@ -143,7 +153,8 @@ if [ $stage -le 9 ]; then
   )&
 fi
 
-if [ $stage -le 10 ]; then
+if [ $stage -le 10 ] && [ $end_stage -ge 10 ]; then
+	echo "STAGE 10: train LDA+MLLT as tri2b"
   steps/align_si.sh --nj 10 --cmd "$train_cmd" \
                     data/train_10k data/lang_nosp exp/tri1 exp/tri1_ali_10k
 
@@ -169,7 +180,8 @@ if [ $stage -le 10 ]; then
   )&
 fi
 
-if [ $stage -le 11 ]; then
+if [ $stage -le 11 ] && [ $end_stage -ge 11 ]; then
+	echo "STAGE 11: train LDA+MLLT+SAT as tri3b on 10k"
   # Align a 10k utts subset using the tri2b model
   steps/align_si.sh  --nj 10 --cmd "$train_cmd" --use-graphs true \
                      data/train_10k data/lang_nosp exp/tri2b exp/tri2b_ali_10k
@@ -195,7 +207,8 @@ if [ $stage -le 11 ]; then
   )&
 fi
 
-if [ $stage -le 12 ]; then
+if [ $stage -le 12 ] && [ $end_stage -ge 12 ]; then
+	echo "STAGE 12: train LDA+MLLT+SAT as tri4b on 100hrs"
   # align the entire train_clean_100 subset using the tri3b model
   steps/align_fmllr.sh --nj 20 --cmd "$train_cmd" \
     data/train_clean_100 data/lang_nosp \
@@ -226,7 +239,8 @@ if [ $stage -le 12 ]; then
   )&
 fi
 
-if [ $stage -le 13 ]; then
+if [ $stage -le 13 ] && [ $end_stage -ge 13 ]; then
+	echo "STAGE 13: incorporate silence and pronunciation probability to tri4b"
   # Now we compute the pronunciation and silence probabilities from training data,
   # and re-create the lang directory.
   steps/get_prons.sh --cmd "$train_cmd" \
@@ -265,6 +279,7 @@ if [ $stage -le 13 ]; then
   )&
 fi
 
+echo "STAGE 14: DEPRECATED"
 if [ $stage -le 14 ] && false; then
   # This stage is for nnet2 training on 100 hours; we're commenting it out
   # as it's deprecated.
@@ -276,7 +291,8 @@ if [ $stage -le 14 ] && false; then
   local/nnet2/run_5a_clean_100.sh
 fi
 
-if [ $stage -le 15 ]; then
+if [ $stage -le 15 ] && [ $end_stage -ge 15 ]; then
+	echo "STAGE 15: add 360hrs data"
   local/download_and_untar.sh $data $data_url train-clean-360
 
   # now add the "clean-360" subset to the mix ...
@@ -292,7 +308,8 @@ if [ $stage -le 15 ]; then
     data/train_clean_460 data/train_clean_100 data/train_clean_360
 fi
 
-if [ $stage -le 16 ]; then
+if [ $stage -le 16 ] && [ $end_stage -ge 16 ]; then
+	echo "STAGE 16: retrain model as tri5b on 460hrs"
   # align the new, combined set, using the tri4b model
   steps/align_fmllr.sh --nj 40 --cmd "$train_cmd" \
                        data/train_clean_460 data/lang exp/tri4b exp/tri4b_ali_clean_460
@@ -327,7 +344,8 @@ fi
 ## train a NN model on the 460 hour set
 #local/nnet2/run_6a_clean_460.sh
 
-if [ $stage -le 17 ]; then
+if [ $stage -le 17 ] && [ $end_stage -ge 17 ]; then
+	echo "STAGE 17: add 500hrs data"
   # prepare the remaining 500 hours of data
   local/download_and_untar.sh $data $data_url train-other-500
 
@@ -344,7 +362,8 @@ if [ $stage -le 17 ]; then
     data/train_960 data/train_clean_460 data/train_other_500
 fi
 
-if [ $stage -le 18 ]; then
+if [ $stage -le 18 ] && [ $stage -ge 18 ]; then
+	echo "STAGE 18: retrain model as tri6b on 960hrs"
   steps/align_fmllr.sh --nj 40 --cmd "$train_cmd" \
                        data/train_960 data/lang exp/tri5b exp/tri5b_ali_960
 
@@ -373,7 +392,8 @@ if [ $stage -le 18 ]; then
 fi
 
 
-if [ $stage -le 19 ]; then
+if [ $stage -le 19 ] && [ $end_stage -ge 19 ]; then
+	echo "STAGE 19: clean up data"
   # this does some data-cleaning. The cleaned data should be useful when we add
   # the neural net and chain systems.  (although actually it was pretty clean already.)
   local/run_cleanup_segmentation.sh
@@ -400,7 +420,8 @@ fi
 #     --rnnlm-tag "h150-me3-400-nce20" $data data/local/lm
 
 
-if [ $stage -le 20 ]; then
+if [ $stage -le 20 ] && [ $end_stage -ge 20 ]; then
+	echo "STAGE 20: train TDNN with chain model"
   # train and test nnet3 tdnn models on the entire data with data-cleaning.
   local/chain/run_tdnn.sh # set "--stage 11" if you have already run local/nnet3/run_tdnn.sh
 fi
@@ -424,3 +445,5 @@ fi
 
 # Wait for decodings in the background
 wait
+
+echo "DONE!!!"
