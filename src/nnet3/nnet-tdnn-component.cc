@@ -25,6 +25,7 @@
 #include "nnet3/nnet-convolutional-component.h"
 #include "nnet3/nnet-computation-graph.h"
 #include "nnet3/nnet-parse.h"
+#include "matrix/compressed-matrix.h"
 
 namespace kaldi {
 namespace nnet3 {
@@ -382,6 +383,8 @@ void TdnnComponent::Write(std::ostream &os, bool binary) const {
   WriteIntegerVector(os, binary, time_offsets_);
   WriteToken(os, binary, "<LinearParams>");
   linear_params_.Write(os, binary);
+  //CompressedMatrix temp{Matrix<BaseFloat>(linear_params_)};
+  //temp.Write(os, binary);
   WriteToken(os, binary, "<BiasParams>");
   bias_params_.Write(os, binary);
   WriteToken(os, binary, "<OrthonormalConstraint>");

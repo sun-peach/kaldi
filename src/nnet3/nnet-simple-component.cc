@@ -28,6 +28,7 @@
 #include "nnet3/nnet-simple-component.h"
 #include "nnet3/nnet-parse.h"
 #include "cudamatrix/cu-math.h"
+#include "matrix/compressed-matrix.h"
 
 namespace kaldi {
 namespace nnet3 {
@@ -2934,7 +2935,9 @@ void NaturalGradientAffineComponent::Write(std::ostream &os,
                                            bool binary) const {
   WriteUpdatableCommon(os, binary);  // Write the opening tag and learning rate
   WriteToken(os, binary, "<LinearParams>");
-  linear_params_.Write(os, binary);
+  linear_params_.Write(os, binary); 
+  //CompressedMatrix temp{Matrix<BaseFloat>(linear_params_)};
+  //temp.Write(os, binary);
   WriteToken(os, binary, "<BiasParams>");
   bias_params_.Write(os, binary);
   WriteToken(os, binary, "<RankIn>");
