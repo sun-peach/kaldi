@@ -23,7 +23,7 @@ nnet_dir=exp/xvector_nnet_1a
 musan_root=/media/feit/Data/Data/musan
 
 
-stage=2
+stage=4
 disp_stage=0
 
 if [ $stage -le 0 ]; then
@@ -43,6 +43,7 @@ fi
 
 if [ $stage -le 1 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   # Make MFCCs and compute the energy-based VAD for each dataset
   for name in train voxceleb1_test; do
     steps/make_mfcc.sh --write-utt2num-frames true --mfcc-config conf/mfcc.conf --nj 20 --cmd "$train_cmd" \
@@ -58,6 +59,7 @@ fi
 # noise, music, and babble, and combine it with the clean data.
 if [ $stage -le 2 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   frame_shift=0.01
   awk -v frame_shift=$frame_shift '{print $1, $2*frame_shift;}' data/train/utt2num_frames > data/train/reco2dur
 
@@ -111,6 +113,7 @@ fi
 
 if [ $stage -le 3 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   # Take a random subset of the augmentations
   utils/subset_data_dir.sh data/train_aug 1000000 data/train_aug_1m
   utils/fix_data_dir.sh data/train_aug_1m
@@ -129,6 +132,7 @@ fi
 # Now we prepare the features to generate examples for xvector training.
 if [ $stage -le 4 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   # This script applies CMVN and removes nonspeech frames.  Note that this is somewhat
   # wasteful, as it roughly doubles the amount of training data on disk.  After
   # creating training examples, this can be removed.
@@ -139,6 +143,7 @@ fi
 
 if [ $stage -le 5 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   # Now, we need to remove features that are too short after removing silence
   # frames.  We want atleast 5s (500 frames) per utterance.
   min_len=400
@@ -165,6 +170,7 @@ fi
 
 if [ $stage -le 6 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
 # Stages 6 through 8 are handled in run_xvector.sh
 local/nnet3/xvector/run_xvector.sh --stage $stage --train-stage -1 \
   --data data/train_combined_no_sil --nnet-dir $nnet_dir \
@@ -187,6 +193,7 @@ fi
 
 if [ $stage -le 10 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   # Compute the mean vector for centering the evaluation xvectors.
   $train_cmd $nnet_dir/xvectors_train/log/compute_mean.log \
     ivector-mean scp:$nnet_dir/xvectors_train/xvector.scp \
@@ -208,6 +215,7 @@ fi
 
 if [ $stage -le 11 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   $train_cmd exp/scores/log/voxceleb1_test_scoring.log \
     ivector-plda-scoring --normalize-length=true \
     "ivector-copy-plda --smoothing=0.0 $nnet_dir/xvectors_train/plda - |" \
@@ -218,6 +226,7 @@ fi
 
 if [ $stage -le 12 ]; then
 	echo "STAGE $(($disp_stage+1))"
+	disp_stage=$(($disp_stage+1))
   eer=`compute-eer <(local/prepare_for_eer.py $voxceleb1_trials exp/scores_voxceleb1_test) 2> /dev/null`
   mindcf1=`sid/compute_min_dcf.py --p-target 0.01 exp/scores_voxceleb1_test $voxceleb1_trials 2> /dev/null`
   mindcf2=`sid/compute_min_dcf.py --p-target 0.001 exp/scores_voxceleb1_test $voxceleb1_trials 2> /dev/null`

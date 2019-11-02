@@ -1,0 +1,21 @@
+STAGE 1
+local/nnet3/xvector/prepare_feats_for_egs.sh --nj 20 --cmd run.pl --mem 4G data/train_combined data/train_combined_no_sil exp/train_combined_no_sil
+local/nnet3/xvector/prepare_feats_for_egs.sh: Succeeded creating xvector features for train_combined
+fix_data_dir.sh: kept all 2276888 utterances.
+fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
+STAGE 1
+fix_data_dir.sh: kept all 2139843 utterances.
+fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
+fix_data_dir.sh: kept all 2139843 utterances.
+fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
+STAGE 1
+local/nnet3/xvector/run_xvector.sh: Getting neural network training egs
+sid/nnet3/xvector/get_egs.sh --cmd run.pl --mem 4G --nj 8 --stage 0 --frames-per-iter 1000000000 --frames-per-iter-diagnostic 100000 --min-frames-per-chunk 200 --max-frames-per-chunk 400 --num-diagnostic-archives 3 --num-repeats 50 data/train_combined_no_sil exp/xvector_nnet_1a/egs
+feat-to-dim scp:data/train_combined_no_sil/feats.scp - 
+sid/nnet3/xvector/get_egs.sh: Preparing train and validation lists
+sid/nnet3/xvector/get_egs.sh: Producing 84 archives for training
+sid/nnet3/xvector/get_egs.sh: Allocating training examples
+sid/nnet3/xvector/get_egs.sh: Allocating training subset examples
+sid/nnet3/xvector/get_egs.sh: Allocating validation examples
+sid/nnet3/xvector/get_egs.sh: Generating training examples on disk
+sid/nnet3/xvector/get_egs.sh: Generating training subset examples on disk
