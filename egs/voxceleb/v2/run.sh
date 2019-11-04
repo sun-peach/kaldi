@@ -23,11 +23,11 @@ nnet_dir=exp/xvector_nnet_1a
 musan_root=/media/feit/Data/Data/musan
 
 
-stage=4
+stage=6
 disp_stage=0
 
 if [ $stage -le 0 ]; then
-	echo STAGE $disp_stage
+	echo "STAGE $disp_stage"
   local/make_voxceleb2.pl $voxceleb2_root dev data/voxceleb2_train
   local/make_voxceleb2.pl $voxceleb2_root test data/voxceleb2_test
   # This script creates data/voxceleb1_test and data/voxceleb1_train for latest version of VoxCeleb1.
@@ -41,9 +41,9 @@ if [ $stage -le 0 ]; then
   utils/combine_data.sh data/train data/voxceleb2_train data/voxceleb2_test data/voxceleb1_train
 fi
 
-if [ $stage -le 1 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 1 ]; then
+	echo "STAGE $disp_stage"
   # Make MFCCs and compute the energy-based VAD for each dataset
   for name in train voxceleb1_test; do
     steps/make_mfcc.sh --write-utt2num-frames true --mfcc-config conf/mfcc.conf --nj 20 --cmd "$train_cmd" \
@@ -55,11 +55,11 @@ if [ $stage -le 1 ]; then
   done
 fi
 
+	disp_stage=$(($disp_stage+1))
 # In this section, we augment the VoxCeleb2 data with reverberation,
 # noise, music, and babble, and combine it with the clean data.
 if [ $stage -le 2 ]; then
-	echo "STAGE $(($disp_stage+1))"
-	disp_stage=$(($disp_stage+1))
+	echo "STAGE $disp_stage"
   frame_shift=0.01
   awk -v frame_shift=$frame_shift '{print $1, $2*frame_shift;}' data/train/utt2num_frames > data/train/reco2dur
 
@@ -68,6 +68,8 @@ if [ $stage -le 2 ]; then
     wget --no-check-certificate http://www.openslr.org/resources/28/rirs_noises.zip
     unzip rirs_noises.zip
   fi
+
+  # RIRS_NOISES MUST BE IN CURRENT DIRECTORY !!!
 
   # Make a version with reverberated speech
   rvb_opts=()
@@ -111,9 +113,9 @@ if [ $stage -le 2 ]; then
   utils/combine_data.sh data/train_aug data/train_reverb data/train_noise data/train_music data/train_babble
 fi
 
-if [ $stage -le 3 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 3 ]; then
+	echo "STAGE $disp_stage"
   # Take a random subset of the augmentations
   utils/subset_data_dir.sh data/train_aug 1000000 data/train_aug_1m
   utils/fix_data_dir.sh data/train_aug_1m
@@ -129,10 +131,10 @@ if [ $stage -le 3 ]; then
   utils/combine_data.sh data/train_combined data/train_aug_1m data/train
 fi
 
+	disp_stage=$(($disp_stage+1))
 # Now we prepare the features to generate examples for xvector training.
 if [ $stage -le 4 ]; then
-	echo "STAGE $(($disp_stage+1))"
-	disp_stage=$(($disp_stage+1))
+	echo "STAGE $disp_stage"
   # This script applies CMVN and removes nonspeech frames.  Note that this is somewhat
   # wasteful, as it roughly doubles the amount of training data on disk.  After
   # creating training examples, this can be removed.
@@ -141,9 +143,9 @@ if [ $stage -le 4 ]; then
   utils/fix_data_dir.sh data/train_combined_no_sil
 fi
 
-if [ $stage -le 5 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 5 ]; then
+	echo "STAGE $disp_stage"
   # Now, we need to remove features that are too short after removing silence
   # frames.  We want atleast 5s (500 frames) per utterance.
   min_len=400
@@ -168,18 +170,19 @@ if [ $stage -le 5 ]; then
   utils/fix_data_dir.sh data/train_combined_no_sil
 fi
 
-if [ $stage -le 6 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 8 ]; then
+	echo "STAGE $disp_stage"
 # Stages 6 through 8 are handled in run_xvector.sh
 local/nnet3/xvector/run_xvector.sh --stage $stage --train-stage -1 \
   --data data/train_combined_no_sil --nnet-dir $nnet_dir \
   --egs-dir $nnet_dir/egs
 fi
+exit 0
 
-
+	disp_stage=$(($disp_stage+1))
 if [ $stage -le 9 ]; then
-	echo "STAGE $(($disp_stage+1))"
+	echo "STAGE $disp_stage"
   # Extract x-vectors for centering, LDA, and PLDA training.
   sid/nnet3/xvector/extract_xvectors.sh --cmd "$train_cmd --mem 4G" --nj 20 \
     $nnet_dir data/train \
@@ -191,9 +194,9 @@ if [ $stage -le 9 ]; then
     $nnet_dir/xvectors_voxceleb1_test
 fi
 
-if [ $stage -le 10 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 10 ]; then
+	echo "STAGE $disp_stage"
   # Compute the mean vector for centering the evaluation xvectors.
   $train_cmd $nnet_dir/xvectors_train/log/compute_mean.log \
     ivector-mean scp:$nnet_dir/xvectors_train/xvector.scp \
@@ -213,9 +216,9 @@ if [ $stage -le 10 ]; then
     $nnet_dir/xvectors_train/plda || exit 1;
 fi
 
-if [ $stage -le 11 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 11 ]; then
+	echo "STAGE $disp_stage"
   $train_cmd exp/scores/log/voxceleb1_test_scoring.log \
     ivector-plda-scoring --normalize-length=true \
     "ivector-copy-plda --smoothing=0.0 $nnet_dir/xvectors_train/plda - |" \
@@ -224,9 +227,9 @@ if [ $stage -le 11 ]; then
     "cat '$voxceleb1_trials' | cut -d\  --fields=1,2 |" exp/scores_voxceleb1_test || exit 1;
 fi
 
-if [ $stage -le 12 ]; then
-	echo "STAGE $(($disp_stage+1))"
 	disp_stage=$(($disp_stage+1))
+if [ $stage -le 12 ]; then
+	echo "STAGE $disp_stage"
   eer=`compute-eer <(local/prepare_for_eer.py $voxceleb1_trials exp/scores_voxceleb1_test) 2> /dev/null`
   mindcf1=`sid/compute_min_dcf.py --p-target 0.01 exp/scores_voxceleb1_test $voxceleb1_trials 2> /dev/null`
   mindcf2=`sid/compute_min_dcf.py --p-target 0.001 exp/scores_voxceleb1_test $voxceleb1_trials 2> /dev/null`

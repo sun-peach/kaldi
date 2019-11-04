@@ -1,14 +1,4 @@
-STAGE 1
-local/nnet3/xvector/prepare_feats_for_egs.sh --nj 20 --cmd run.pl --mem 4G data/train_combined data/train_combined_no_sil exp/train_combined_no_sil
-local/nnet3/xvector/prepare_feats_for_egs.sh: Succeeded creating xvector features for train_combined
-fix_data_dir.sh: kept all 2276888 utterances.
-fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
-STAGE 1
-fix_data_dir.sh: kept all 2139843 utterances.
-fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
-fix_data_dir.sh: kept all 2139843 utterances.
-fix_data_dir.sh: old files are kept in data/train_combined_no_sil/.backup
-STAGE 1
+STAGE 6
 local/nnet3/xvector/run_xvector.sh: Getting neural network training egs
 sid/nnet3/xvector/get_egs.sh --cmd run.pl --mem 4G --nj 8 --stage 0 --frames-per-iter 1000000000 --frames-per-iter-diagnostic 100000 --min-frames-per-chunk 200 --max-frames-per-chunk 400 --num-diagnostic-archives 3 --num-repeats 50 data/train_combined_no_sil exp/xvector_nnet_1a/egs
 feat-to-dim scp:data/train_combined_no_sil/feats.scp - 
@@ -19,3 +9,190 @@ sid/nnet3/xvector/get_egs.sh: Allocating training subset examples
 sid/nnet3/xvector/get_egs.sh: Allocating validation examples
 sid/nnet3/xvector/get_egs.sh: Generating training examples on disk
 sid/nnet3/xvector/get_egs.sh: Generating training subset examples on disk
+sid/nnet3/xvector/get_egs.sh: Generating validation examples on disk
+sid/nnet3/xvector/get_egs.sh: Shuffling order of archives on disk
+sid/nnet3/xvector/get_egs.sh: Finished preparing training examples
+local/nnet3/xvector/run_xvector.sh: creating neural net configs using the xconfig parser
+nnet3-init exp/xvector_nnet_1a/configs//ref.config exp/xvector_nnet_1a/configs//ref.raw 
+LOG (nnet3-init[5.5.348~1-57e0]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/xvector_nnet_1a/configs//ref.raw
+nnet3-info exp/xvector_nnet_1a/configs//ref.raw 
+nnet3-init exp/xvector_nnet_1a/configs//ref.config exp/xvector_nnet_1a/configs//ref.raw 
+LOG (nnet3-init[5.5.348~1-57e0]:main():nnet3-init.cc:80) Initialized raw neural net and wrote it to exp/xvector_nnet_1a/configs//ref.raw
+nnet3-info exp/xvector_nnet_1a/configs//ref.raw 
+steps/nnet3/xconfig_to_configs.py --xconfig-file exp/xvector_nnet_1a/configs/network.xconfig --config-dir exp/xvector_nnet_1a/configs/
+2019-11-03 00:38:41,720 [steps/nnet3/train_raw_dnn.py:35 - <module> - INFO ] Starting raw DNN trainer (train_raw_dnn.py)
+2019-11-03 00:38:41,730 [steps/nnet3/train_raw_dnn.py:196 - train - INFO ] Arguments for the experiment
+{'backstitch_training_interval': 1,
+ 'backstitch_training_scale': 0.0,
+ 'cleanup': True,
+ 'cmvn_opts': None,
+ 'combine_sum_to_one_penalty': 0.0,
+ 'command': 'run.pl --mem 4G',
+ 'compute_average_posteriors': False,
+ 'compute_per_dim_accuracy': False,
+ 'dir': 'exp/xvector_nnet_1a',
+ 'do_final_combination': True,
+ 'dropout_schedule': '0,0@0.20,0.1@0.50,0',
+ 'egs_command': None,
+ 'egs_dir': 'exp/xvector_nnet_1a/egs',
+ 'egs_opts': None,
+ 'egs_stage': 0,
+ 'email': None,
+ 'exit_stage': None,
+ 'feat_dir': None,
+ 'final_effective_lrate': 0.0001,
+ 'frames_per_eg': 1,
+ 'image_augmentation_opts': None,
+ 'initial_effective_lrate': 0.001,
+ 'input_model': None,
+ 'max_lda_jobs': 10,
+ 'max_models_combine': 20,
+ 'max_objective_evaluations': 30,
+ 'max_param_change': 2.0,
+ 'minibatch_size': '64',
+ 'momentum': 0.5,
+ 'nj': 4,
+ 'num_epochs': 3.0,
+ 'num_jobs_compute_prior': 10,
+ 'num_jobs_final': 2,
+ 'num_jobs_initial': 1,
+ 'num_jobs_step': 1,
+ 'online_ivector_dir': None,
+ 'preserve_model_interval': 10,
+ 'presoftmax_prior_scale_power': -0.25,
+ 'prior_subset_size': 20000,
+ 'proportional_shrink': 10.0,
+ 'rand_prune': 4.0,
+ 'remove_egs': False,
+ 'reporting_interval': 0.1,
+ 'samples_per_iter': 400000,
+ 'shuffle_buffer_size': 1000,
+ 'srand': 123,
+ 'stage': -1,
+ 'targets_scp': None,
+ 'train_opts': [],
+ 'use_dense_targets': True,
+ 'use_gpu': 'yes'}
+2019-11-03 00:38:41,732 [steps/nnet3/train_raw_dnn.py:316 - train - INFO ] Preparing the initial network.
+2019-11-03 00:38:42,072 [steps/nnet3/train_raw_dnn.py:354 - train - INFO ] Training will run for 3.0 epochs = 168 iterations
+2019-11-03 00:38:42,072 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 0/167   Jobs: 1   Epoch: 0.00/3.0 (0.0% complete)   lr: 0.001000   shrink: 0.99000
+2019-11-03 00:44:11,792 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 1/167   Jobs: 1   Epoch: 0.01/3.0 (0.4% complete)   lr: 0.000991   shrink: 0.99009
+2019-11-03 00:49:33,566 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 2/167   Jobs: 1   Epoch: 0.02/3.0 (0.8% complete)   lr: 0.000982   shrink: 0.99018
+2019-11-03 00:57:36,441 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 3/167   Jobs: 1   Epoch: 0.04/3.0 (1.2% complete)   lr: 0.000973   shrink: 0.99027
+2019-11-03 01:04:39,440 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 4/167   Jobs: 1   Epoch: 0.05/3.0 (1.6% complete)   lr: 0.000964   shrink: 0.99036
+2019-11-03 01:11:51,318 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 5/167   Jobs: 1   Epoch: 0.06/3.0 (2.0% complete)   lr: 0.000955   shrink: 0.99045
+2019-11-03 01:18:09,059 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 6/167   Jobs: 1   Epoch: 0.07/3.0 (2.4% complete)   lr: 0.000947   shrink: 0.99053
+2019-11-03 01:22:49,347 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 7/167   Jobs: 1   Epoch: 0.08/3.0 (2.8% complete)   lr: 0.000938   shrink: 0.99062
+2019-11-03 01:28:23,557 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 8/167   Jobs: 1   Epoch: 0.10/3.0 (3.2% complete)   lr: 0.000930   shrink: 0.99070
+2019-11-03 01:36:28,189 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 9/167   Jobs: 1   Epoch: 0.11/3.0 (3.6% complete)   lr: 0.000921   shrink: 0.99079
+2019-11-03 01:44:43,083 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 10/167   Jobs: 1   Epoch: 0.12/3.0 (4.0% complete)   lr: 0.000913   shrink: 0.99087
+2019-11-03 01:50:43,825 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 11/167   Jobs: 1   Epoch: 0.13/3.0 (4.4% complete)   lr: 0.000904   shrink: 0.99096
+2019-11-03 01:57:28,840 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 12/167   Jobs: 1   Epoch: 0.14/3.0 (4.8% complete)   lr: 0.000896   shrink: 0.99104
+2019-11-03 01:05:40,503 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 13/167   Jobs: 1   Epoch: 0.15/3.0 (5.2% complete)   lr: 0.000888   shrink: 0.99112
+2019-11-03 01:11:07,802 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 14/167   Jobs: 1   Epoch: 0.17/3.0 (5.6% complete)   lr: 0.000880   shrink: 0.99120
+2019-11-03 01:18:45,596 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 15/167   Jobs: 1   Epoch: 0.18/3.0 (6.0% complete)   lr: 0.000872   shrink: 0.99128
+2019-11-03 01:23:43,070 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 16/167   Jobs: 1   Epoch: 0.19/3.0 (6.3% complete)   lr: 0.000864   shrink: 0.99136
+2019-11-03 01:31:06,217 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 17/167   Jobs: 1   Epoch: 0.20/3.0 (6.7% complete)   lr: 0.000856   shrink: 0.99144
+2019-11-03 01:37:45,682 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 18/167   Jobs: 1   Epoch: 0.21/3.0 (7.1% complete)   lr: 0.000848   shrink: 0.99152
+2019-11-03 01:44:38,855 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 19/167   Jobs: 1   Epoch: 0.23/3.0 (7.5% complete)   lr: 0.000841   shrink: 0.99159
+2019-11-03 01:49:59,019 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 20/167   Jobs: 1   Epoch: 0.24/3.0 (7.9% complete)   lr: 0.000833   shrink: 0.99167
+2019-11-03 01:56:11,747 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 21/167   Jobs: 1   Epoch: 0.25/3.0 (8.3% complete)   lr: 0.000825   shrink: 0.99175
+2019-11-03 02:01:43,294 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 22/167   Jobs: 1   Epoch: 0.26/3.0 (8.7% complete)   lr: 0.000818   shrink: 0.99182
+2019-11-03 02:10:08,759 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 23/167   Jobs: 1   Epoch: 0.27/3.0 (9.1% complete)   lr: 0.000810   shrink: 0.99190
+2019-11-03 02:17:41,574 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 24/167   Jobs: 1   Epoch: 0.29/3.0 (9.5% complete)   lr: 0.000803   shrink: 0.99197
+2019-11-03 02:23:35,624 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 25/167   Jobs: 1   Epoch: 0.30/3.0 (9.9% complete)   lr: 0.000796   shrink: 0.99204
+2019-11-03 02:32:13,093 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 26/167   Jobs: 1   Epoch: 0.31/3.0 (10.3% complete)   lr: 0.000789   shrink: 0.99211
+2019-11-03 02:36:58,164 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 27/167   Jobs: 1   Epoch: 0.32/3.0 (10.7% complete)   lr: 0.000781   shrink: 0.99219
+2019-11-03 02:46:02,369 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 28/167   Jobs: 1   Epoch: 0.33/3.0 (11.1% complete)   lr: 0.000774   shrink: 0.99226
+2019-11-03 02:54:15,312 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 29/167   Jobs: 1   Epoch: 0.35/3.0 (11.5% complete)   lr: 0.000767   shrink: 0.99233
+2019-11-03 02:59:59,759 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 30/167   Jobs: 1   Epoch: 0.36/3.0 (11.9% complete)   lr: 0.000760   shrink: 0.99240
+2019-11-03 03:06:46,903 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 31/167   Jobs: 1   Epoch: 0.37/3.0 (12.3% complete)   lr: 0.000753   shrink: 0.99247
+2019-11-03 03:15:22,923 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 32/167   Jobs: 1   Epoch: 0.38/3.0 (12.7% complete)   lr: 0.000746   shrink: 0.99254
+2019-11-03 03:20:40,872 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 33/167   Jobs: 1   Epoch: 0.39/3.0 (13.1% complete)   lr: 0.000740   shrink: 0.99260
+2019-11-03 03:28:23,761 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 34/167   Jobs: 1   Epoch: 0.40/3.0 (13.5% complete)   lr: 0.000733   shrink: 0.99267
+2019-11-03 03:35:47,487 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 35/167   Jobs: 1   Epoch: 0.42/3.0 (13.9% complete)   lr: 0.000726   shrink: 0.99274
+2019-11-03 03:42:24,456 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 36/167   Jobs: 1   Epoch: 0.43/3.0 (14.3% complete)   lr: 0.000720   shrink: 0.99280
+2019-11-03 03:47:21,867 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 37/167   Jobs: 1   Epoch: 0.44/3.0 (14.7% complete)   lr: 0.000713   shrink: 0.99287
+2019-11-03 03:53:33,228 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 38/167   Jobs: 1   Epoch: 0.45/3.0 (15.1% complete)   lr: 0.000707   shrink: 0.99293
+2019-11-03 03:58:59,788 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 39/167   Jobs: 1   Epoch: 0.46/3.0 (15.5% complete)   lr: 0.000700   shrink: 0.99300
+2019-11-03 04:04:21,858 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 40/167   Jobs: 1   Epoch: 0.48/3.0 (15.9% complete)   lr: 0.000694   shrink: 0.99306
+2019-11-03 04:11:53,509 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 41/167   Jobs: 1   Epoch: 0.49/3.0 (16.3% complete)   lr: 0.000688   shrink: 0.99312
+2019-11-03 04:19:48,269 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 42/167   Jobs: 1   Epoch: 0.50/3.0 (16.7% complete)   lr: 0.000681   shrink: 0.99319
+2019-11-03 04:24:55,555 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 43/167   Jobs: 1   Epoch: 0.51/3.0 (17.1% complete)   lr: 0.000675   shrink: 0.99325
+2019-11-03 04:33:45,926 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 44/167   Jobs: 1   Epoch: 0.52/3.0 (17.5% complete)   lr: 0.000669   shrink: 0.99331
+2019-11-03 04:43:05,809 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 45/167   Jobs: 1   Epoch: 0.54/3.0 (17.9% complete)   lr: 0.000663   shrink: 0.99337
+2019-11-03 04:50:06,128 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 46/167   Jobs: 1   Epoch: 0.55/3.0 (18.3% complete)   lr: 0.000657   shrink: 0.99343
+2019-11-03 04:59:23,326 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 47/167   Jobs: 1   Epoch: 0.56/3.0 (18.7% complete)   lr: 0.000651   shrink: 0.99349
+2019-11-03 05:06:00,994 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 48/167   Jobs: 1   Epoch: 0.57/3.0 (19.0% complete)   lr: 0.000645   shrink: 0.99355
+2019-11-03 05:14:03,800 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 49/167   Jobs: 1   Epoch: 0.58/3.0 (19.4% complete)   lr: 0.000639   shrink: 0.99361
+2019-11-03 05:21:56,569 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 50/167   Jobs: 1   Epoch: 0.60/3.0 (19.8% complete)   lr: 0.000633   shrink: 0.99367
+2019-11-03 05:30:07,706 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 51/167   Jobs: 1   Epoch: 0.61/3.0 (20.2% complete)   lr: 0.000628   shrink: 0.99372
+2019-11-03 05:35:53,304 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 52/167   Jobs: 1   Epoch: 0.62/3.0 (20.6% complete)   lr: 0.000622   shrink: 0.99378
+2019-11-03 05:42:08,086 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 53/167   Jobs: 1   Epoch: 0.63/3.0 (21.0% complete)   lr: 0.000616   shrink: 0.99384
+2019-11-03 05:47:08,181 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 54/167   Jobs: 1   Epoch: 0.64/3.0 (21.4% complete)   lr: 0.000611   shrink: 0.99389
+2019-11-03 05:52:47,060 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 55/167   Jobs: 1   Epoch: 0.65/3.0 (21.8% complete)   lr: 0.000605   shrink: 0.99395
+2019-11-03 06:00:30,196 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 56/167   Jobs: 1   Epoch: 0.67/3.0 (22.2% complete)   lr: 0.000599   shrink: 0.99401
+2019-11-03 06:06:41,130 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 57/167   Jobs: 1   Epoch: 0.68/3.0 (22.6% complete)   lr: 0.000594   shrink: 0.99406
+2019-11-03 06:13:36,952 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 58/167   Jobs: 1   Epoch: 0.69/3.0 (23.0% complete)   lr: 0.000589   shrink: 0.99411
+2019-11-03 06:22:14,779 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 59/167   Jobs: 1   Epoch: 0.70/3.0 (23.4% complete)   lr: 0.000583   shrink: 0.99417
+2019-11-03 06:30:31,381 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 60/167   Jobs: 1   Epoch: 0.71/3.0 (23.8% complete)   lr: 0.000578   shrink: 0.99422
+2019-11-03 06:39:21,858 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 61/167   Jobs: 1   Epoch: 0.73/3.0 (24.2% complete)   lr: 0.000573   shrink: 0.99427
+2019-11-03 06:45:31,806 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 62/167   Jobs: 1   Epoch: 0.74/3.0 (24.6% complete)   lr: 0.000568   shrink: 0.99432
+2019-11-03 06:52:28,104 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 63/167   Jobs: 1   Epoch: 0.75/3.0 (25.0% complete)   lr: 0.000562   shrink: 0.99438
+2019-11-03 06:58:13,745 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 64/167   Jobs: 1   Epoch: 0.76/3.0 (25.4% complete)   lr: 0.000557   shrink: 0.99443
+2019-11-03 07:05:34,887 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 65/167   Jobs: 1   Epoch: 0.77/3.0 (25.8% complete)   lr: 0.000552   shrink: 0.99448
+2019-11-03 07:13:21,778 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 66/167   Jobs: 1   Epoch: 0.79/3.0 (26.2% complete)   lr: 0.000547   shrink: 0.99453
+2019-11-03 07:22:30,204 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 67/167   Jobs: 1   Epoch: 0.80/3.0 (26.6% complete)   lr: 0.000542   shrink: 0.99458
+2019-11-03 07:29:59,102 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 68/167   Jobs: 1   Epoch: 0.81/3.0 (27.0% complete)   lr: 0.000537   shrink: 0.99463
+2019-11-03 07:36:17,887 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 69/167   Jobs: 1   Epoch: 0.82/3.0 (27.4% complete)   lr: 0.000532   shrink: 0.99468
+2019-11-03 07:41:36,212 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 70/167   Jobs: 1   Epoch: 0.83/3.0 (27.8% complete)   lr: 0.000527   shrink: 0.99473
+2019-11-03 07:46:23,307 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 71/167   Jobs: 1   Epoch: 0.85/3.0 (28.2% complete)   lr: 0.000523   shrink: 0.99477
+2019-11-03 07:51:20,444 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 72/167   Jobs: 1   Epoch: 0.86/3.0 (28.6% complete)   lr: 0.000518   shrink: 0.99482
+2019-11-03 07:56:28,411 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 73/167   Jobs: 1   Epoch: 0.87/3.0 (29.0% complete)   lr: 0.000513   shrink: 0.99487
+2019-11-03 08:03:08,887 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 74/167   Jobs: 1   Epoch: 0.88/3.0 (29.4% complete)   lr: 0.000509   shrink: 0.99491
+2019-11-03 08:10:00,291 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 75/167   Jobs: 1   Epoch: 0.89/3.0 (29.8% complete)   lr: 0.000504   shrink: 0.99496
+2019-11-03 08:16:13,545 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 76/167   Jobs: 1   Epoch: 0.90/3.0 (30.2% complete)   lr: 0.000499   shrink: 0.99501
+2019-11-03 08:21:39,055 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 77/167   Jobs: 1   Epoch: 0.92/3.0 (30.6% complete)   lr: 0.000495   shrink: 0.99505
+2019-11-03 08:27:09,503 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 78/167   Jobs: 1   Epoch: 0.93/3.0 (31.0% complete)   lr: 0.000490   shrink: 0.99510
+2019-11-03 08:34:54,391 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 79/167   Jobs: 1   Epoch: 0.94/3.0 (31.3% complete)   lr: 0.000486   shrink: 0.99514
+2019-11-03 08:43:20,325 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 80/167   Jobs: 1   Epoch: 0.95/3.0 (31.7% complete)   lr: 0.000481   shrink: 0.99519
+2019-11-03 08:49:56,151 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 81/167   Jobs: 1   Epoch: 0.96/3.0 (32.1% complete)   lr: 0.000477   shrink: 0.99523
+2019-11-03 08:59:03,688 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 82/167   Jobs: 1   Epoch: 0.98/3.0 (32.5% complete)   lr: 0.000473   shrink: 0.99527
+2019-11-03 09:06:53,375 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 83/167   Jobs: 1   Epoch: 0.99/3.0 (32.9% complete)   lr: 0.000468   shrink: 0.99532
+2019-11-03 09:14:03,575 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 84/167   Jobs: 2   Epoch: 1.00/3.0 (33.3% complete)   lr: 0.000928   shrink: 0.99072
+2019-11-03 09:26:04,434 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 85/167   Jobs: 2   Epoch: 1.02/3.0 (34.1% complete)   lr: 0.000912   shrink: 0.99088
+2019-11-03 09:42:37,345 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 86/167   Jobs: 2   Epoch: 1.05/3.0 (34.9% complete)   lr: 0.000895   shrink: 0.99105
+2019-11-03 09:58:09,625 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 87/167   Jobs: 2   Epoch: 1.07/3.0 (35.7% complete)   lr: 0.000879   shrink: 0.99121
+2019-11-03 10:03:42,754 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 88/167   Jobs: 2   Epoch: 1.10/3.0 (36.5% complete)   lr: 0.000863   shrink: 0.99137
+2019-11-03 10:22:39,076 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 89/167   Jobs: 2   Epoch: 1.12/3.0 (37.3% complete)   lr: 0.000847   shrink: 0.99153
+2019-11-03 10:29:54,384 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 90/167   Jobs: 2   Epoch: 1.14/3.0 (38.1% complete)   lr: 0.000832   shrink: 0.99168
+2019-11-03 10:44:50,664 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 91/167   Jobs: 2   Epoch: 1.17/3.0 (38.9% complete)   lr: 0.000817   shrink: 0.99183
+2019-11-03 10:59:20,887 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 92/167   Jobs: 2   Epoch: 1.19/3.0 (39.7% complete)   lr: 0.000802   shrink: 0.99198
+2019-11-03 11:07:16,629 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 93/167   Jobs: 2   Epoch: 1.21/3.0 (40.5% complete)   lr: 0.000788   shrink: 0.99212
+2019-11-03 11:14:10,965 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 94/167   Jobs: 2   Epoch: 1.24/3.0 (41.3% complete)   lr: 0.000773   shrink: 0.99227
+2019-11-03 11:27:25,405 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 95/167   Jobs: 2   Epoch: 1.26/3.0 (42.1% complete)   lr: 0.000759   shrink: 0.99241
+2019-11-03 11:45:53,093 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 96/167   Jobs: 2   Epoch: 1.29/3.0 (42.9% complete)   lr: 0.000746   shrink: 0.99254
+2019-11-03 12:01:44,649 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 97/167   Jobs: 2   Epoch: 1.31/3.0 (43.7% complete)   lr: 0.000732   shrink: 0.99268
+2019-11-03 12:10:49,545 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 98/167   Jobs: 2   Epoch: 1.33/3.0 (44.4% complete)   lr: 0.000719   shrink: 0.99281
+2019-11-03 12:19:31,424 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 99/167   Jobs: 2   Epoch: 1.36/3.0 (45.2% complete)   lr: 0.000706   shrink: 0.99294
+2019-11-03 12:36:21,457 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 100/167   Jobs: 2   Epoch: 1.38/3.0 (46.0% complete)   lr: 0.000693   shrink: 0.99307
+2019-11-03 13:00:56,853 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 101/167   Jobs: 2   Epoch: 1.40/3.0 (46.8% complete)   lr: 0.000680   shrink: 0.99320
+2019-11-03 13:17:09,728 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 102/167   Jobs: 2   Epoch: 1.43/3.0 (47.6% complete)   lr: 0.000668   shrink: 0.99332
+2019-11-03 13:30:09,351 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 103/167   Jobs: 2   Epoch: 1.45/3.0 (48.4% complete)   lr: 0.000656   shrink: 0.99344
+2019-11-03 13:42:52,185 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 104/167   Jobs: 2   Epoch: 1.48/3.0 (49.2% complete)   lr: 0.000644   shrink: 0.99356
+2019-11-03 14:00:11,079 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 105/167   Jobs: 2   Epoch: 1.50/3.0 (50.0% complete)   lr: 0.000632   shrink: 0.99368
+2019-11-03 14:09:02,158 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 106/167   Jobs: 2   Epoch: 1.52/3.0 (50.8% complete)   lr: 0.000621   shrink: 0.99379
+2019-11-03 14:26:56,045 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 107/167   Jobs: 2   Epoch: 1.55/3.0 (51.6% complete)   lr: 0.000610   shrink: 0.99390
+2019-11-03 14:45:15,414 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 108/167   Jobs: 2   Epoch: 1.57/3.0 (52.4% complete)   lr: 0.000599   shrink: 0.99401
+2019-11-03 15:03:42,926 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 109/167   Jobs: 2   Epoch: 1.60/3.0 (53.2% complete)   lr: 0.000588   shrink: 0.99412
+2019-11-03 15:11:55,317 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 110/167   Jobs: 2   Epoch: 1.62/3.0 (54.0% complete)   lr: 0.000577   shrink: 0.99423
+2019-11-03 15:18:37,534 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 111/167   Jobs: 2   Epoch: 1.64/3.0 (54.8% complete)   lr: 0.000567   shrink: 0.99433
+2019-11-03 15:26:54,106 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 112/167   Jobs: 2   Epoch: 1.67/3.0 (55.6% complete)   lr: 0.000557   shrink: 0.99443
+2019-11-03 15:33:51,602 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 113/167   Jobs: 2   Epoch: 1.69/3.0 (56.3% complete)   lr: 0.000546   shrink: 0.99454
+2019-11-03 15:43:02,919 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 114/167   Jobs: 2   Epoch: 1.71/3.0 (57.1% complete)   lr: 0.000537   shrink: 0.99463
+2019-11-03 15:59:52,261 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 115/167   Jobs: 2   Epoch: 1.74/3.0 (57.9% complete)   lr: 0.000527   shrink: 0.99473
+2019-11-03 16:06:50,334 [steps/nnet3/train_raw_dnn.py:391 - train - INFO ] Iter: 116/167   Jobs: 2   Epoch: 1.76/3.0 (58.7% complete)   lr: 0.000517   shrink: 0.99483
+run.pl: job failed, log is in exp/xvector_nnet_1a/log/train.116.2.log
+2019-11-03 16:06:55,334 [steps/libs/common.py:236 - background_command_waiter - ERROR ] Command exited with status 1: run.pl --mem 4G --gpu 1 exp/xvector_nnet_1a/log/train.116.2.log                     nnet3-train --use-gpu=yes --read-cache=exp/xvector_nnet_1a/cache.116                       --print-interval=10                     --momentum=0.5                     --max-param-change=2.0                     --backstitch-training-scale=0.0                     --l2-regularize-factor=0.5                     --backstitch-training-interval=1                     --srand=239                       "nnet3-copy --learning-rate=0.0005172832410551938 --scale=0.9948271675894481 exp/xvector_nnet_1a/116.raw - |nnet3-copy --edits='set-dropout-proportion name=* proportion=0.08253968253968254' - - |" "ark,bg:nnet3-copy-egs --frame=0               scp:exp/xvector_nnet_1a/egs/egs.66.scp ark:- |             nnet3-shuffle-egs --buffer-size=1000             --srand=239 ark:- ark:- |              nnet3-merge-egs --minibatch-size=64 ark:- ark:- |"                     exp/xvector_nnet_1a/117.2.raw
+steps/nnet3/train_raw_dnn.py --stage=-1 --cmd=run.pl --mem 4G --trainer.optimization.proportional-shrink 10 --trainer.optimization.momentum=0.5 --trainer.optimization.num-jobs-initial=1 --trainer.optimization.num-jobs-final=2 --trainer.optimization.initial-effective-lrate=0.001 --trainer.optimization.final-effective-lrate=0.0001 --trainer.optimization.minibatch-size=64 --trainer.srand=123 --trainer.max-param-change=2 --trainer.num-epochs=3 --trainer.dropout-schedule=0,0@0.20,0.1@0.50,0 --trainer.shuffle-buffer-size=1000 --egs.frames-per-eg=1 --egs.dir=exp/xvector_nnet_1a/egs --cleanup.remove-egs false --cleanup.preserve-model-interval=10 --use-gpu=true --dir=exp/xvector_nnet_1a
+['steps/nnet3/train_raw_dnn.py', '--stage=-1', '--cmd=run.pl --mem 4G', '--trainer.optimization.proportional-shrink', '10', '--trainer.optimization.momentum=0.5', '--trainer.optimization.num-jobs-initial=1', '--trainer.optimization.num-jobs-final=2', '--trainer.optimization.initial-effective-lrate=0.001', '--trainer.optimization.final-effective-lrate=0.0001', '--trainer.optimization.minibatch-size=64', '--trainer.srand=123', '--trainer.max-param-change=2', '--trainer.num-epochs=3', '--trainer.dropout-schedule=0,0@0.20,0.1@0.50,0', '--trainer.shuffle-buffer-size=1000', '--egs.frames-per-eg=1', '--egs.dir=exp/xvector_nnet_1a/egs', '--cleanup.remove-egs', 'false', '--cleanup.preserve-model-interval=10', '--use-gpu=true', '--dir=exp/xvector_nnet_1a']
